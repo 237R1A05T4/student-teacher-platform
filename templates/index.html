@@ -1,138 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>📢 Student-Teacher Announcements</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f1f5f9;
-      color: #333;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-    }
-
-    header {
-      background-color: #2563eb;
-      color: white;
-      padding: 15px 0;
-      font-size: 22px;
-      font-weight: bold;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    }
-
-    main {
-      background: white;
-      width: 90%;
-      max-width: 500px;
-      margin: 30px auto;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    input {
-      width: 65%;
-      padding: 8px;
-      border: 1.5px solid #a5b4fc;
-      border-radius: 6px;
-      font-size: 14px;
-      outline: none;
-    }
-
-    input:focus {
-      border-color: #4f46e5;
-    }
-
-    button {
-      background-color: #10b981;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      padding: 9px 13px;
-      font-size: 14px;
-      margin-left: 6px;
-      cursor: pointer;
-      transition: 0.2s;
-    }
-
-    button:hover {
-      background-color: #059669;
-      transform: scale(1.03);
-    }
-
-    ul {
-      list-style-type: none;
-      padding: 0;
-      margin-top: 20px;
-      text-align: left;
-    }
-
-    li {
-      background-color: #e0f2fe;
-      border-left: 4px solid #2563eb;
-      padding: 10px 12px;
-      margin: 8px 0;
-      border-radius: 5px;
-      font-size: 15px;
-    }
-
-    footer {
-      margin-top: 30px;
-      padding: 10px;
-      background-color: #e2e8f0;
-      color: #555;
-      font-size: 12px;
-    }
-  </style>
+    <title>Announcements</title>
 </head>
-
 <body>
-
-  <header>📢 Student-Teacher Announcement Board</header>
-
-  <main>
-    <h3>Post or View Announcements</h3>
-
-    <div>
-      <input type="text" id="announcement" placeholder="Enter your announcement...">
-      <button onclick="postAnnouncement()">Post</button>
-    </div>
-
+    <h1>Announcements</h1>
     <ul id="list"></ul>
-  </main>
 
-  <footer>
-    © 2025 Student-Teacher Platform | DevOps Lab Project
-  </footer>
+    <input type="text" id="announcement" placeholder="New announcement">
+    <button onclick="postAnnouncement()">Post</button>
 
-  <script>
+    <script>
     async function fetchAnnouncements() {
-      const res = await fetch('/announcements');
-      const data = await res.json();
-      const list = document.getElementById('list');
-      list.innerHTML = '';
-      data.forEach(a => {
-        const li = document.createElement('li');
-        li.textContent = "📢 " + a.text;
-        list.appendChild(li);
-      });
+        let res = await fetch('/announcements');
+        let data = await res.json();
+        let list = document.getElementById('list');
+        list.innerHTML = '';
+        data.forEach(a => {
+            let li = document.createElement('li');
+            li.textContent = a.text;
+            list.appendChild(li);
+        });
     }
 
     async function postAnnouncement() {
-      const text = document.getElementById('announcement').value.trim();
-      if (!text) return;
-      await fetch('/announcements', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({text})
-      });
-      document.getElementById('announcement').value = '';
-      fetchAnnouncements();
+        let text = document.getElementById('announcement').value;
+        if(!text) return;
+        await fetch('/announcements', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({text})
+        });
+        document.getElementById('announcement').value = '';
+        fetchAnnouncements();
     }
 
     fetchAnnouncements();
-  </script>
-
+    </script>
 </body>
 </html>
